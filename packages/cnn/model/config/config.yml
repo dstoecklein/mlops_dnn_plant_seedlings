@@ -1,0 +1,19 @@
+# NAMING
+package_name: cnn
+pipeline_name: cnn_pipeline
+
+# MODEL PERSISTING
+pipeline_save_file: cnn_pipeline_output.pkl
+model_save_file: cnn_model.h5
+classes_save_file: classes.pkl
+encoder_save_file: encoder.pkl
+
+# DATA
+data_folder: plant_seedlings_v2
+
+# MODEL FITTING
+test_size: 0.3
+seed: 101
+image_size: 150
+batch_size: 10
+epochs: 10
