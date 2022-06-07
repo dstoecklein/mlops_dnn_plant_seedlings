@@ -14,6 +14,9 @@ class AppConfig(BaseModel):
     package_name: str
     pipeline_name: str
     pipeline_save_file: str
+    model_save_file: str
+    classes_save_file: str
+    encoder_save_file: str
 
 
 class ModelConfig(BaseModel):

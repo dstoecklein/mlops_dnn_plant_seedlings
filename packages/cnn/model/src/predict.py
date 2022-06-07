@@ -1,4 +1,4 @@
 from model.config.core import config
 
-
-print(config.model_config.epochs)
+if __name__ == '__main__':
+    print(config.app_config.package_name)
