@@ -1,10 +1,10 @@
+import pandas as pd
+import joblib
 from pathlib import Path
 from typing import Tuple
-import pandas as pd
 from model.config import core
 from model.config.core import config
 from sklearn.model_selection import train_test_split
-from sklearn.externals import joblib
 from sklearn.pipeline import Pipeline
 
 
@@ -18,9 +18,9 @@ def load_images(data_path: Path) -> pd.DataFrame:
         if class_folder_path.is_dir(): # check if directory
             for image in Path.iterdir(class_folder_path): # iter files
                 if image.is_file(): # check if file
-                    if image.suffix in config.model_config.valid_image_extensions: # check if image
+                    if image.suffix in config.data_config.valid_image_extensions: # check if image
                         tmp = pd.DataFrame([str(image), str(class_folder_path.name)]).T
-                        tmp.columns = config.model_config.data_columns
+                        tmp.columns = config.data_config.data_columns
                         images_df.append(tmp)
     
     images_df = pd.concat(images_df, axis=0, ignore_index=True)
@@ -32,10 +32,10 @@ def get_train_test_split(images_df: pd.DataFrame) -> Tuple:
     Performs train test split
     """ 
     X_train, X_test, y_train, y_test = train_test_split(
-        images_df[config.model_config.data_columns[0]],
-        images_df[config.model_config.data_columns[1]],
-        test_size=config.model_config.test_size,
-        random_state=config.model_config.seed
+        images_df[config.data_config.data_columns[0]],
+        images_df[config.data_config.data_columns[1]],
+        test_size=config.data_config.test_size,
+        random_state=config.data_config.seed
     )
 
     X_train.reset_index(drop=True, inplace=True)
@@ -56,7 +56,7 @@ def load_pipeline() -> Pipeline:
 
 
 if __name__ == '__main__':
-    images_df = load_images(core.DATA_PATH / config.app_config.data_folder_name)
+    images_df = load_images(core.DATA_PATH / config.data_config.data_folder_name)
     print(images_df.head())
 
     X_train, X_test, y_train, y_test = get_train_test_split(images_df)

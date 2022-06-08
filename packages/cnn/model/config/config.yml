@@ -1,8 +1,7 @@
-# NAMING
+# APP
 package_name: cnn
 pipeline_name: cnn_pipeline
-
-# MODEL PERSISTING
+## model persisting
 pipeline_save_file: cnn_pipeline_output.pkl
 model_save_file: cnn_model.h5
 classes_save_file: classes.pkl
@@ -16,11 +15,24 @@ valid_image_extensions:
   - .jpg
 test_size: 0.2
 seed: 101
-batch_size: 10
 data_columns:
   - image
   - target
 
-# MODEL FITTING
+# MODEL
+batch_size: 10
 epochs: 10
+learning_rate: 0.0001
+loss: binary_crossentropy
+metrics:
+  - accuracy
+validation_split: 10
+## callbacks
+checkpoint_monitor: acc
+checkpoint_mode: max
+reducelr_monitor: acc
+reducelr_factor: 0.5
+reducelr_patience: 2
+reducelr_mode: max
+reducelr_minlr: 0.00001
 

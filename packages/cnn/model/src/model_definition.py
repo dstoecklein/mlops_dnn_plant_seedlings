@@ -35,34 +35,38 @@ def cnn_model(kernel_size=(3,3),
     model.add(Dropout(dropout_dense))
     model.add(Dense(12, activation = "softmax"))
 
-    model.compile(Adam(learning_rate=0.0001), loss='binary_crossentropy', metrics=['accuracy'])
+    model.compile(
+        Adam(learning_rate=config.model_config.learning_rate), 
+        loss=config.model_config.loss, 
+        metrics=config.model_config.metrics
+    )
 
     return model
 
 
 checkpoint = ModelCheckpoint(config.app_config.model_save_file,
-                             monitor='acc',
+                             monitor=config.model_config.checkpoint_monitor,
                              verbose=1, 
                              save_best_only=True,
-                             mode='max')
+                             mode=config.model_config.checkpoint_mode)
 
-reduce_lr = ReduceLROnPlateau(monitor='acc',
-                              factor=0.5,
-                              patience=2,
+reduce_lr = ReduceLROnPlateau(monitor=config.model_config.reducelr_monitor,
+                              factor=config.model_config.reducelr_factor,
+                              patience=config.model_config.reducelr_patience,
                               verbose=1,
-                              mode='max',
-                              min_lr=0.00001)
+                              mode=config.model_config.reducelr_mode,
+                              min_lr=config.model_config.reducelr_minlr)
                               
                               
 callbacks_list = [checkpoint, reduce_lr]
 
 cnn_clf = KerasClassifier(build_fn=cnn_model,
                           batch_size=config.model_config.batch_size, 
-                          validation_split=10,
+                          validation_split=config.model_config.validation_split,
                           epochs=config.model_config.epochs,
                           verbose=2,
                           callbacks=callbacks_list,
-                          image_size = config.model_config.image_size
+                          image_size = config.data_config.image_size
                           )
 
 

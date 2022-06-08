@@ -14,25 +14,40 @@ CONFIG_FILE = CONFIG_PATH / "config.yml"
 class AppConfig(BaseModel):
     package_name: str
     pipeline_name: str
-    data_folder_name: str
     pipeline_save_file: str
     model_save_file: str
     classes_save_file: str
     encoder_save_file: str
 
 
-class ModelConfig(BaseModel):
-    test_size: float
-    seed: int
+class DataConfig(BaseModel):
+    data_folder_name: str
     image_size: int
     valid_image_extensions: List[str]
+    test_size: float
+    seed: int
     data_columns: List[str]
+
+
+class ModelConfig(BaseModel):
     batch_size: int
     epochs: int
+    learning_rate: float
+    loss: str
+    metrics: List[str]
+    validation_split: int
+    checkpoint_monitor: str
+    checkpoint_mode: str
+    reducelr_monitor: str
+    reducelr_factor: float
+    reducelr_patience: int
+    reducelr_mode: str
+    reducelr_minlr: float
 
 
 class MasterConfig(BaseModel):
     app_config: AppConfig
+    data_config: DataConfig
     model_config: ModelConfig
 
 
@@ -58,6 +73,7 @@ def create_and_validate_config(config_file: YAML=None) -> MasterConfig:
     
     _config = MasterConfig(
         app_config=AppConfig(**config_file.data),
+        data_config=DataConfig(**config_file.data),
         model_config=ModelConfig(**config_file.data)
     )
     return _config
