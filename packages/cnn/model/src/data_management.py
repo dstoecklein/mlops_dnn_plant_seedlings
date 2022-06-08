@@ -46,7 +46,6 @@ def get_train_test_split(images_df: pd.DataFrame) -> Tuple:
     return X_train, X_test, y_train, y_test
 
 
-# ToDo:
 def save_pipeline(model) -> None:
     pass
 
