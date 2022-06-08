@@ -1,3 +1,5 @@
+from typing import Tuple
+
 from keras.callbacks import ModelCheckpoint, ReduceLROnPlateau
 from keras.layers import Conv2D, Dense, Dropout, Flatten, MaxPooling2D
 from keras.models import Sequential
@@ -9,15 +11,15 @@ from model.config.core import config
 
 
 def cnn_model(
-    kernel_size=(3, 3),
-    pool_size=(2, 2),
-    first_filters=32,
-    second_filters=64,
-    third_filters=128,
-    dropout_conv=0.3,
-    dropout_dense=0.3,
-    image_size=50,
-):
+    kernel_size: Tuple = (3, 3),
+    pool_size: Tuple = (2, 2),
+    first_filters: int = 32,
+    second_filters: int = 64,
+    third_filters: int = 128,
+    dropout_conv: float = 0.3,
+    dropout_dense: float = 0.3,
+    image_size: int = 50,
+) -> Sequential:
 
     model = Sequential()
     model.add(
