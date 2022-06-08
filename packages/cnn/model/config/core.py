@@ -1,7 +1,8 @@
 from pathlib import Path
+from typing import List
+
 from pydantic import BaseModel
 from strictyaml import YAML, load
-from typing import List
 
 CWD = Path(__file__).resolve().parent
 ROOT = CWD.parent
@@ -51,11 +52,11 @@ class MasterConfig(BaseModel):
     model_config: ModelConfig
 
 
-def get_config_path() -> str:
+def get_config_path() -> Path:
     return CONFIG_FILE
 
 
-def read_config_file(config_path: str=None) -> YAML:
+def read_config_file(config_path: Path = None) -> YAML:
     if not config_path:
         config_path = get_config_path()
 
@@ -67,14 +68,14 @@ def read_config_file(config_path: str=None) -> YAML:
         raise Exception(f"No config file found at {config_path}")
 
 
-def create_and_validate_config(config_file: YAML=None) -> MasterConfig:
+def create_and_validate_config(config_file: YAML = None) -> MasterConfig:
     if config_file is None:
         config_file = read_config_file()
-    
+
     _config = MasterConfig(
         app_config=AppConfig(**config_file.data),
         data_config=DataConfig(**config_file.data),
-        model_config=ModelConfig(**config_file.data)
+        model_config=ModelConfig(**config_file.data),
     )
     return _config
 
