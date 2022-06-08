@@ -28,9 +28,9 @@ metrics:
   - accuracy
 validation_split: 10
 ## callbacks
-checkpoint_monitor: acc
+checkpoint_monitor: accuracy
 checkpoint_mode: max
-reducelr_monitor: acc
+reducelr_monitor: accuracy
 reducelr_factor: 0.5
 reducelr_patience: 2
 reducelr_mode: max

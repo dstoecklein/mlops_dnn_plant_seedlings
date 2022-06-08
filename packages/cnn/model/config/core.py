@@ -6,8 +6,8 @@ from typing import List
 CWD = Path(__file__).resolve().parent
 ROOT = CWD.parent
 DATA_PATH = ROOT.parent / "data"
+ARTIFACTS_PATH = ROOT.parent / "artifacts"
 CONFIG_PATH = ROOT / "config"
-ARTIFACTS_PATH = ROOT / "artifacts"
 CONFIG_FILE = CONFIG_PATH / "config.yml"
 
 

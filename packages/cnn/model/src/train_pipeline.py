@@ -14,6 +14,8 @@ def run_training(save_pipeline: bool=True):
     encoder.fit(y_train)
     y_train = encoder.transform(y_train)
 
+    pipe.pipeline.fit(X_train, y_train)
+
     if save_pipeline:
         joblib.dump(encoder, core.ARTIFACTS_PATH / config.app_config.encoder_save_file)
         dm.save_pipeline(pipe.pipeline)

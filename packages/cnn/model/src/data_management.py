@@ -50,12 +50,18 @@ def get_train_test_split(images_df: pd.DataFrame) -> Tuple:
 
 
 def save_pipeline(model: Pipeline) -> None:
+    """
+    Saves the training pipeline artifacts
+    """ 
     joblib.dump(model.named_steps['dataset'], core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
     joblib.dump(model.named_steps['cnn_model'].classes_, core.ARTIFACTS_PATH / config.app_config.classes_save_file)
     model.named_steps['cnn_model'].model.save(core.ARTIFACTS_PATH / config.app_config.model_save_file)
 
 
 def load_pipeline() -> Pipeline:
+    """
+    Loads the training pipeline artifacts
+    """ 
     dataset = joblib.load(core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
     build_model = lambda: load_model(core.ARTIFACTS_PATH / config.app_config.model_save_file)
 

@@ -3,6 +3,7 @@ from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Flatten
 from keras.optimizers import Adam
 from keras.callbacks import ReduceLROnPlateau, ModelCheckpoint
 from keras.wrappers.scikit_learn import KerasClassifier
+from model.config import core
 from model.config.core import config
 
 def cnn_model(kernel_size=(3,3),
@@ -44,7 +45,7 @@ def cnn_model(kernel_size=(3,3),
     return model
 
 
-checkpoint = ModelCheckpoint(config.app_config.model_save_file,
+checkpoint = ModelCheckpoint(core.ARTIFACTS_PATH / config.app_config.model_save_file,
                              monitor=config.model_config.checkpoint_monitor,
                              verbose=1, 
                              save_best_only=True,
