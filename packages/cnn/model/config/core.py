@@ -14,11 +14,12 @@ CONFIG_FILE = CONFIG_PATH / "config.yml"
 class AppConfig(BaseModel):
     package_name: str
     pipeline_name: str
+    data_folder_name: str
     pipeline_save_file: str
     model_save_file: str
     classes_save_file: str
     encoder_save_file: str
-    data_folder: str
+
 
 class ModelConfig(BaseModel):
     test_size: float
