@@ -6,6 +6,9 @@ from model.config import core
 from model.config.core import config
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from keras.models import load_model
+from keras.wrappers.scikit_learn import KerasClassifier
+import model_definition
 
 
 def load_images(data_path: Path) -> pd.DataFrame:
@@ -46,12 +49,34 @@ def get_train_test_split(images_df: pd.DataFrame) -> Tuple:
     return X_train, X_test, y_train, y_test
 
 
-def save_pipeline(model) -> None:
-    pass
+def save_pipeline(model: Pipeline) -> None:
+    joblib.dump(model.named_steps['dataset'], core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
+    joblib.dump(model.named_steps['cnn_model'].classes_, core.ARTIFACTS_PATH / config.app_config.classes_save_file)
+    model.named_steps['cnn_model'].model.save(core.ARTIFACTS_PATH / config.app_config.model_save_file)
 
-# ToDo:
+
 def load_pipeline() -> Pipeline:
-    pass
+    dataset = joblib.load(core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
+    build_model = lambda: load_model(core.ARTIFACTS_PATH / config.app_config.model_save_file)
+
+    classifier = KerasClassifier(
+        build_fn=build_model,
+        batch_size=config.model_config.batch_size,
+        #validation_split=config.model_config.validation_split,
+        epochs=config.model_config.epochs,
+        verbose=2,
+        callbacks=model_definition.callbacks_list
+    )
+
+    classifier.classes_ = joblib.load(core.ARTIFACTS_PATH / config.app_config.classes_save_file)
+    classifier.model = build_model()
+
+    return Pipeline(
+        [
+            ('dataset', dataset),
+            ('cnn_model', classifier)
+        ]
+    )
 
 
 if __name__ == '__main__':
