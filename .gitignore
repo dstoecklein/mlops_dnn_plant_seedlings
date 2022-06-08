@@ -132,3 +132,5 @@ dmypy.json
 *.png
 *.jpg
 
+# skip saved model
+*.h5
