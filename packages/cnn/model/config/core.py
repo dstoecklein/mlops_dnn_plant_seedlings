@@ -1,6 +1,7 @@
 from pathlib import Path
 from pydantic import BaseModel
 from strictyaml import YAML, load
+from typing import List
 
 CWD = Path(__file__).resolve().parent
 ROOT = CWD.parent
@@ -17,12 +18,14 @@ class AppConfig(BaseModel):
     model_save_file: str
     classes_save_file: str
     encoder_save_file: str
-
+    data_folder: str
 
 class ModelConfig(BaseModel):
     test_size: float
     seed: int
     image_size: int
+    valid_image_extensions: List[str]
+    data_columns: List[str]
     batch_size: int
     epochs: int
 

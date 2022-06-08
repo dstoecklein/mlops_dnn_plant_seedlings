@@ -10,10 +10,17 @@ encoder_save_file: encoder.pkl
 
 # DATA
 data_folder: plant_seedlings_v2
-
-# MODEL FITTING
+image_size: 150
+valid_image_extensions:
+  - .png
+  - .jpg
 test_size: 0.3
 seed: 101
-image_size: 150
 batch_size: 10
+data_columns:
+  - image
+  - target
+
+# MODEL FITTING
 epochs: 10
+
