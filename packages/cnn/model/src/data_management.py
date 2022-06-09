@@ -117,8 +117,6 @@ def remove_old_pipelines(*, files_to_keep: List[str]) -> None:
     used by other applications.
     """
     do_not_delete = files_to_keep + ["__int__.py"]
-    for model_file in Path(
-        core.ARTIFACTS_PATH / config.app_config.model_save_file
-    ).iterdir():
+    for model_file in Path(core.ARTIFACTS_PATH).iterdir():
         if model_file.name not in do_not_delete:
             model_file.unlink()
