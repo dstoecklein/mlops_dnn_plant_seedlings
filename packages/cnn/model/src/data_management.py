@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 
 import joblib
 import model_definition
@@ -8,6 +8,7 @@ from keras.models import load_model
 from keras.wrappers.scikit_learn import KerasClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
+from sklearn.preprocessing import LabelEncoder
 
 from model.config import core
 from model.config.core import config
@@ -69,6 +70,15 @@ def save_pipeline(model: Pipeline) -> None:
         core.ARTIFACTS_PATH / config.app_config.model_save_file
     )
 
+    remove_old_pipelines(
+        files_to_keep=[
+            config.app_config.model_save_file,
+            config.app_config.encoder_save_file,
+            config.app_config.pipeline_save_file,
+            config.app_config.classes_save_file,
+        ]
+    )
+
 
 def load_pipeline() -> Pipeline:
     """
@@ -94,9 +104,21 @@ def load_pipeline() -> Pipeline:
     return Pipeline([("dataset", dataset), ("cnn_model", classifier)])
 
 
-if __name__ == "__main__":
-    images_df = load_images(core.DATA_PATH / config.data_config.data_folder_name)
-    print(images_df.head())
+def load_encoder() -> LabelEncoder:
+    encoder = joblib.load(core.ARTIFACTS_PATH / config.app_config.encoder_save_file)
+    return encoder
 
-    X_train, X_test, y_train, y_test = get_train_test_split(images_df)
-    print(X_train.shape, X_test.shape, y_train.shape, y_test.shape)
+
+def remove_old_pipelines(*, files_to_keep: List[str]) -> None:
+    """
+    Removes old pipelines, models, encoders and classes.
+    To ensure there is a 1:1 mapping between the package
+    version and the model version to be imported and
+    used by other applications.
+    """
+    do_not_delete = files_to_keep + ["__int__.py"]
+    for model_file in Path(
+        core.ARTIFACTS_PATH / config.app_config.model_save_file
+    ).iterdir():
+        if model_file.name not in do_not_delete:
+            model_file.unlink()

@@ -1,6 +1,6 @@
 from pathlib import Path
-from model.config import core
 
+from model.config import core
 
 path = Path(core.ROOT) / "VERSION"
 with path.open() as version_file:
