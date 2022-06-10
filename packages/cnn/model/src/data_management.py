@@ -1,3 +1,4 @@
+import logging
 from pathlib import Path
 from typing import List, Tuple
 
@@ -13,6 +14,8 @@ from sklearn.preprocessing import LabelEncoder
 from model.config import core
 from model.config.core import config
 
+_logger = logging.getLogger(__name__)
+print(_logger)
 
 def load_single_image(image_path: Path, filename: str) -> pd.DataFrame:
     """
