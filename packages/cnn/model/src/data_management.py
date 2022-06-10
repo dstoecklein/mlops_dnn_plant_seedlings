@@ -15,23 +15,18 @@ from model.config import core
 from model.config.core import config
 
 _logger = logging.getLogger(__name__)
-print(_logger)
+
 
 def load_single_image(image_path: Path, filename: str) -> pd.DataFrame:
     """
     Creates dataframe with image path and target
     """
-    images_df = list()  # list with dataframes (path, target)
-
-
     image = image_path / filename
     if image.is_file():
-        tmp = pd.DataFrame([image, 'unkown']).T
-        images_df.append(tmp)
+        images_df = pd.DataFrame([image, "unkown"]).T
     else:
-        raise RuntimeError("No such file '{}'".format(image))
+        raise RuntimeError(f"No such file {image}")
 
-    images_df = pd.concat(images_df, axis=0, ignore_index=True)
     images_df.columns = config.data_config.data_columns
     return images_df
 
@@ -46,12 +41,13 @@ def load_bulk_images(data_path: Path) -> pd.DataFrame:
         if class_folder_path.is_dir():  # check if directory
             for image in Path.iterdir(class_folder_path):  # iter files
                 if image.is_file():  # check if file
-                    if (
-                        image.suffix in config.data_config.valid_image_extensions
-                    ):  # check if image
-                        tmp = pd.DataFrame([str(image), str(class_folder_path.name)]).T
-                        tmp.columns = config.data_config.data_columns
-                        images_df.append(tmp)
+                    tmp = pd.DataFrame([str(image), str(class_folder_path.name)]).T
+                    tmp.columns = config.data_config.data_columns
+                    images_df.append(tmp)
+                else:
+                    raise RuntimeError(f"No such file {image}")
+        else:
+            raise RuntimeError(f"No such path {class_folder_path}")
 
     images_df = pd.concat(images_df, axis=0, ignore_index=True)
     return images_df
@@ -107,6 +103,7 @@ def load_pipeline() -> Pipeline:
     Loads the training pipeline artifacts
     """
     dataset = joblib.load(core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
+
     def _build_model():
         return load_model(core.ARTIFACTS_PATH / config.app_config.model_save_file)
 
