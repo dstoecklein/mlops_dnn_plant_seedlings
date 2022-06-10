@@ -1,7 +1,10 @@
+import logging
 from pathlib import Path
 
 from model import __version__ as _version
 from model.src import data_management as dm
+
+_logger = logging.getLogger(__name__)
 
 MODEL_PIPELINE = dm.load_pipeline()
 ENCODER = dm.load_encoder()
@@ -19,9 +22,18 @@ def make_single_prediction(*, image_path: Path, filename: str):
     """
     image_df = dm.load_single_image(image_path=image_path, filename=filename)
     prepared_df = image_df["image"].astype(str).reset_index(drop=True)
+    _logger.info(
+        f'received input array: {prepared_df},'
+        f'filename: {filename}'
+    )
 
     predictions = MODEL_PIPELINE.predict(prepared_df)
     readable_predictions = ENCODER.encoder.inverse_transform(predictions)
+    _logger.info(
+        f'Made prediction: {predictions} '
+        f'with model version: {_version}'
+    )
+
     result_dict = dict(
         predictions=predictions,
         readable_predictions=readable_predictions,
