@@ -14,7 +14,24 @@ from model.config import core
 from model.config.core import config
 
 
-def load_images(data_path: Path) -> pd.DataFrame:
+def load_single_image(image_path: Path, filename: str) -> pd.DataFrame:
+    """
+    Creates dataframe with image path and target
+    """
+    images_df = list()  # list with dataframes (path, target)
+
+    for image in Path.iterdir(image_path):
+        if image.is_file():
+            if image.name == filename: 
+                tmp = pd.DataFrame([image, 'unkown']).T
+                images_df.append(tmp)
+        
+    images_df = pd.concat(images_df, axis=0, ignore_index=True)
+    images_df.columns = config.data_config.data_columns
+    return images_df
+
+
+def load_bulk_images(data_path: Path) -> pd.DataFrame:
     """
     Creates dataframe with image path and target
     """
@@ -85,10 +102,11 @@ def load_pipeline() -> Pipeline:
     Loads the training pipeline artifacts
     """
     dataset = joblib.load(core.ARTIFACTS_PATH / config.app_config.pipeline_save_file)
-    built_model = load_model(core.ARTIFACTS_PATH / config.app_config.model_save_file)
+    def _build_model():
+        return load_model(core.ARTIFACTS_PATH / config.app_config.model_save_file)
 
     classifier = KerasClassifier(
-        build_fn=built_model,
+        build_fn=_build_model,
         batch_size=config.model_config.batch_size,
         # validation_split=config.model_config.validation_split,
         epochs=config.model_config.epochs,
@@ -99,7 +117,8 @@ def load_pipeline() -> Pipeline:
     classifier.classes_ = joblib.load(
         core.ARTIFACTS_PATH / config.app_config.classes_save_file
     )
-    classifier.model = built_model()
+
+    classifier.model = _build_model()
 
     return Pipeline([("dataset", dataset), ("cnn_model", classifier)])
 

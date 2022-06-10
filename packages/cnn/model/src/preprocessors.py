@@ -1,13 +1,9 @@
 import cv2
-import data_management as dm
 import numpy as np
 import pandas as pd
 from keras.utils import np_utils
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.preprocessing import LabelEncoder
-
-from model.config import core
-from model.config.core import config
 
 
 def _resize_img(images_df: pd.DataFrame, n: int, image_size: int) -> np.ndarray:
@@ -57,16 +53,3 @@ class CreateDataset(BaseEstimator, TransformerMixin):
 
         print("Dataset Images shape: {} size: {:,}".format(tmp.shape, tmp.size))
         return tmp
-
-
-if __name__ == "__main__":
-    images_df = dm.load_images(core.DATA_PATH / config.data_config.data_folder_name)
-    X_train, X_test, y_train, y_test = dm.get_train_test_split(images_df)
-
-    encoder = TargetEncoder()
-    encoder.fit(y_train)
-    y_train = encoder.transform(y_train)
-    print(y_train)
-
-    dataCreator = CreateDataset()
-    X_train = dataCreator.transform(X_train)
