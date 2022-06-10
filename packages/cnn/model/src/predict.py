@@ -34,6 +34,6 @@ if __name__ == "__main__":
     from model.config import core
     from model.config.core import config
     result = make_single_prediction(
-        image_path=core.DATA_PATH / config.data_config.data_folder_name / "Maize", 
-        filename="1.png")
+        image_path=core.DATA_PATH / config.data_config.data_folder_name / "Cleavers", 
+        filename="9.png")
     print(result)

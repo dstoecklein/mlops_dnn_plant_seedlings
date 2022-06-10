@@ -20,12 +20,14 @@ def load_single_image(image_path: Path, filename: str) -> pd.DataFrame:
     """
     images_df = list()  # list with dataframes (path, target)
 
-    for image in Path.iterdir(image_path):
-        if image.is_file():
-            if image.name == filename: 
-                tmp = pd.DataFrame([image, 'unkown']).T
-                images_df.append(tmp)
-        
+
+    image = image_path / filename
+    if image.is_file():
+        tmp = pd.DataFrame([image, 'unkown']).T
+        images_df.append(tmp)
+    else:
+        raise RuntimeError("No such file '{}'".format(image))
+
     images_df = pd.concat(images_df, axis=0, ignore_index=True)
     images_df.columns = config.data_config.data_columns
     return images_df
