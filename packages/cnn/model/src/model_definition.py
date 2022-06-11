@@ -6,8 +6,7 @@ from keras.models import Sequential
 from keras.optimizers import Adam
 from keras.wrappers.scikit_learn import KerasClassifier
 
-from model.config import core
-from model.config.core import config
+from model.config import config
 
 
 def cnn_model(
@@ -50,42 +49,41 @@ def cnn_model(
     model.add(Dense(12, activation="softmax"))
 
     model.compile(
-        Adam(learning_rate=config.model_config.learning_rate),
-        loss=config.model_config.loss,
-        metrics=config.model_config.metrics,
+        Adam(learning_rate=config.LEARNING_RATE),
+        loss=config.LOSS,
+        metrics=config.METRICS,
     )
 
     return model
 
 
 checkpoint = ModelCheckpoint(
-    core.ARTIFACTS_PATH / config.app_config.model_save_file,
-    monitor=config.model_config.checkpoint_monitor,
+    config.MODEL_SAVE_FILE,
+    monitor=config.CP_MONITOR,
     verbose=1,
     save_best_only=True,
-    mode=config.model_config.checkpoint_mode,
+    mode=config.CP_MODE,
 )
 
 reduce_lr = ReduceLROnPlateau(
-    monitor=config.model_config.reducelr_monitor,
-    factor=config.model_config.reducelr_factor,
-    patience=config.model_config.reducelr_patience,
+    monitor=config.REDUCELR_MONITOR,
+    factor=config.REDUCELR_FACTOR,
+    patience=config.REDUCELR_PATIENCE,
     verbose=1,
-    mode=config.model_config.reducelr_mode,
-    min_lr=config.model_config.reducelr_minlr,
+    mode=config.REDUCELR_MODE,
+    min_lr=config.REDUCELR_MINLR,
 )
-
 
 callbacks_list = [checkpoint, reduce_lr]
 
 cnn_clf = KerasClassifier(
     build_fn=cnn_model,
-    batch_size=config.model_config.batch_size,
+    batch_size=config.BATCH_SIZE,
     # validation_split=config.model_config.validation_split,
-    epochs=config.model_config.epochs,
+    epochs=config.EPOCHS,
     verbose=2,
     callbacks=callbacks_list,
-    image_size=config.data_config.image_size,
+    image_size=config.IMAGE_SIZE,
 )
 
 

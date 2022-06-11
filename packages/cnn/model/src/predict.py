@@ -22,17 +22,11 @@ def make_single_prediction(*, image_path: Path, filename: str):
     """
     image_df = dm.load_single_image(image_path=image_path, filename=filename)
     prepared_df = image_df["image"].astype(str).reset_index(drop=True)
-    _logger.info(
-        f'received input array: {prepared_df},'
-        f'filename: {filename}'
-    )
+    _logger.info(f"received input array: {prepared_df}," f"filename: {filename}")
 
     predictions = MODEL_PIPELINE.predict(prepared_df)
     readable_predictions = ENCODER.encoder.inverse_transform(predictions)
-    _logger.info(
-        f'Made prediction: {predictions} '
-        f'with model version: {_version}'
-    )
+    _logger.info(f"Made prediction: {predictions} " f"with model version: {_version}")
 
     result_dict = dict(
         predictions=predictions,
@@ -43,11 +37,10 @@ def make_single_prediction(*, image_path: Path, filename: str):
 
 
 if __name__ == "__main__":
-    from model.config import core
-    from model.config.core import config
+    from model.config import config
 
     result = make_single_prediction(
-        image_path=core.DATA_PATH / config.data_config.data_folder_name / "Cleavers",
+        image_path=config.DATA_FOLDER / "Cleavers",
         filename="9.png",
     )
     print(result)
