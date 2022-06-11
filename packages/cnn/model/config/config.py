@@ -12,6 +12,7 @@ with open(MODEL_PATH / "VERSION") as version_file:
 # FOLDERS
 DATASET_FOLDER = PACKAGE_PATH / "data"
 DATA_FOLDER = DATASET_FOLDER / "plant_seedlings_v2"
+TEST_DATA_FOLDER = DATASET_FOLDER / "test_data"
 ARTIFACTS_FOLDER = PACKAGE_PATH / "artifacts"
 
 # MODEl PERSISTING

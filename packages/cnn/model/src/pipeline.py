@@ -1,8 +1,8 @@
-import model_definition
-import preprocessors as pp
 from sklearn.pipeline import Pipeline
 
+import model.src.preprocessors as pp
 from model.config import config
+from model.src import model_definition
 
 pipeline = Pipeline(
     [

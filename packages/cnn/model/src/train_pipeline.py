@@ -1,8 +1,8 @@
-import data_management as dm
 import joblib
-import pipeline as pipe
-import preprocessors as pp
 
+import model.src.data_management as dm
+import model.src.pipeline as pipe
+import model.src.preprocessors as pp
 from model.config import config
 
 

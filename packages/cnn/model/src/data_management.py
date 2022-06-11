@@ -3,7 +3,6 @@ from pathlib import Path
 from typing import List, Tuple
 
 import joblib
-import model_definition
 import pandas as pd
 from keras.models import load_model
 from keras.wrappers.scikit_learn import KerasClassifier
@@ -12,6 +11,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder
 
 from model.config import config
+from model.src import model_definition
 
 _logger = logging.getLogger(__name__)
 
