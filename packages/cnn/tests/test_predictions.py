@@ -8,10 +8,7 @@ def test_make_prediction_on_single_sample_charlock(charlock_dir):
     expected_class = "Charlock"
 
     # When
-    results = make_single_prediction(
-        image_path=charlock_dir, 
-        filename=filename
-    )
+    results = make_single_prediction(image_path=charlock_dir, filename=filename)
 
     # Then
     assert results["predictions"] is not None
@@ -26,8 +23,7 @@ def test_make_prediction_on_single_sample_scentless_mayweed(scentless_mayweed_di
 
     # When
     results = make_single_prediction(
-        image_path=scentless_mayweed_dir, 
-        filename=filename
+        image_path=scentless_mayweed_dir, filename=filename
     )
 
     # Then
