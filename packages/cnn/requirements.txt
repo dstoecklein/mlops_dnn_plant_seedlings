@@ -13,3 +13,7 @@ dvc[gdrive]
 tensorflow==2.9.1
 opencv-python==4.5.5.64
 joblib
+setuptools==58.0.4
+wheel==0.37.0
+pytest==6.2.5
+h5py==3.7.0
